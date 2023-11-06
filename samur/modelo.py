@@ -28,5 +28,8 @@ data['Tiempo Espera'] = np.where(data['Hora Intervención'] < data['Hora Solicit
 data = data.drop(columns=['Hora Solicitud'])
 data = data.drop(columns=['Hora Intervención'])
 
+# Añade la columna Tiempo(minutos) con el tiempo de espera en minutos
+data['Tiempo(minutos)'] = data['Tiempo Espera'].dt.seconds / 60
+
 # Guarda el DataFrame en un archivo csv
 data.to_csv('samur/data.csv', index=False)
