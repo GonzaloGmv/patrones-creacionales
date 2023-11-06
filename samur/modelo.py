@@ -5,10 +5,10 @@ import numpy as np
 URL = "https://datos.madrid.es/egob/catalogo/300178-12-samur-activaciones.csv"
 data = pd.read_csv(URL, sep=';', encoding='UTF-8')
 
-# Elimina la columna Año ya que es siempre el mismo.
+# Elimina la columna Año ya que es siempre el mismo
 data = data.drop(columns=['Año'])
 
-# Los valores nulos de la columna "Hospital" se sustituyen por 0.
+# Los valores nulos de la columna "Hospital" se sustituyen por 0
 data['Hospital'] = data['Hospital'].fillna(0)
 
 # Elimina las filas con valores nulos
@@ -27,3 +27,6 @@ data['Tiempo Espera'] = np.where(data['Hora Intervención'] < data['Hora Solicit
 # Elimina las columnas "Hora Solicitud" y "Hora Intervención" ya que no son necesarias
 data = data.drop(columns=['Hora Solicitud'])
 data = data.drop(columns=['Hora Intervención'])
+
+# Guarda el DataFrame en un archivo csv
+data.to_csv('samur/data.csv', index=False)
