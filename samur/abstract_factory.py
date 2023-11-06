@@ -94,3 +94,39 @@ class ConcreteProductDistritoGrafica(AbstractProductMes):
     
     def calcular_barrasDistrito(self, data):
         pass
+
+def client_code(factory: AbstractFactory):
+    data = pd.read_csv('samur/data.csv')
+
+    productMes = factory.create_mes()
+    productDistrito = factory.create_distrito()
+    
+    if isinstance(factory, ConcreteFactoryAnalisis):
+        # Realizar análisis estadísticos y generar visualizaciones
+        media_mes = productMes.calcular_mediaMes(data)
+        moda_mes = productMes.calcular_modaMes(data)
+
+        media_distrito = productDistrito.calcular_mediaDistrito(data)
+        moda_distrito = productDistrito.calcular_modaDistrito(data)
+
+        print(f"Análisis de Mes - Media: {media_mes}, Moda: {moda_mes}")
+        print(f"Análisis de Distrito - Media: {media_distrito}, Moda: {moda_distrito}")
+    
+    elif isinstance(factory, ConcreteFactoryGrafica):
+        # Generar visualizaciones
+        print(f"Visualización de Mes - Histograma: )")
+        productMes.calcular_histogramaMes(data)
+        print(f"Visualización de Mes - Gráfico de Barras: )")
+        productMes.calcular_barrasMes(data)
+
+        print(f"Visualización de Distrito - Histograma: )")
+        productDistrito.calcular_histogramaDistrito(data)
+        print(f"Visualización de Distrito - Gráfico de Barras: )")
+        productDistrito.calcular_barrasDistrito(data)
+
+if __name__ == "__main__":
+    analisis_factory = ConcreteFactoryAnalisis()
+    client_code(analisis_factory)
+
+    grafica_factory = ConcreteFactoryGrafica()
+    client_code(grafica_factory)
