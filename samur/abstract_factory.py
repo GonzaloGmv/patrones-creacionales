@@ -1,132 +1,158 @@
 import pandas as pd
 import numpy as np
 from abc import ABC, abstractmethod
+import matplotlib.pyplot as plt
 
 class AbstractFactory(ABC):
     @abstractmethod
-    def create_mes(self):
+    def create_analisis(self):
         pass
 
     @abstractmethod
-    def create_distrito(self):
+    def create_grafica(self):
         pass
 
-# Concrete Factory para análisis estadísticos
-class ConcreteFactoryAnalisis(AbstractFactory):
-    def create_mes(self):
-        return ConcreteProductMesAnalisis()
+# Concrete Factory para Mes
+class ConcreteFactoryMes(AbstractFactory):
+    def create_analisis(self):
+        return ConcreteProductAnalisisMes()
 
-    def create_distrito(self):
-        return ConcreteProductDistritoAnalisis()
+    def create_grafica(self):
+        return ConcreteProductGraficaMes()
 
-# Concrete Factory para visualizaciones gráficas
-class ConcreteFactoryGrafica(AbstractFactory):
-    def create_mes(self):
-        return ConcreteProductMesGrafica()
+# Concrete Factory para Distrito
+class ConcreteFactoryDistrito(AbstractFactory):
+    def create_analisis(self):
+        return ConcreteProductAnalisisDistrito()
 
-    def create_distrito(self):
-        return ConcreteProductDistritoGrafica()
+    def create_grafica(self):
+        return ConcreteProductGraficaDistrito()
 
-# Abstract Product para mes
-class AbstractProductMes(ABC):
+# Abstract Product para análisis estadístico
+class AbstractProductAnalisis(ABC):
     @abstractmethod
-    def calcular_mediaMes(self):
-        pass
-
-    @abstractmethod
-    def calcular_modaMes(self):
+    def calcular_media(self):
         pass
 
     @abstractmethod
-    def calcular_histogramaMes(self):
-        pass
-
-    @abstractmethod
-    def calcular_barrasMes(self):
+    def calcular_moda(self):
         pass
 
 # Concrete Product para análisis estadísticos de mes
-class ConcreteProductMesAnalisis(AbstractProductMes):
-    def calcular_mediaMes(self):
-        pass
+class ConcreteProductAnalisisMes(AbstractProductAnalisis):
+    def calcular_media(self, data):
+        media = data.groupby('Mes')['Tiempo(minutos)'].mean()
+        return media
     
-    def calcular_modaMes(self):
+    def calcular_moda(self, data):
+        moda = data.groupby('Mes')['Tiempo(minutos)'].apply(lambda x: x.mode().iloc[0] if not x.mode().empty else None)
+        return moda
+
+# Concrete Product para análisis estadísticos de distrito
+class ConcreteProductAnalisisDistrito(AbstractProductAnalisis):
+    def calcular_media(self, data):
+        media = data.groupby('Distrito')['Tiempo(minutos)'].mean()
+        return media
+    
+    def calcular_moda(self, data):
+        moda = data.groupby('Distrito')['Tiempo(minutos)'].apply(lambda x: x.mode().iloc[0] if not x.mode().empty else None)
+        return moda
+
+# Abstract Product para visualización gráfica
+class AbstractProductGrafica(ABC):
+    @abstractmethod
+    def calcular_histograma(self):
+        pass
+
+    @abstractmethod
+    def calcular_lineas(self):
         pass
 
 # Concrete Product para visualización gráfica de mes
-class ConcreteProductMesGrafica(AbstractProductMes):
-    def calcular_histogramaMes(self):
-        pass
+class ConcreteProductGraficaMes(AbstractProductGrafica):
+    def calcular_histograma(self, data):
+        media = data.groupby('Mes')['Tiempo(minutos)'].mean()
+        media.plot(kind='bar')
+        plt.title('Media de Tiempo(minutos) por Mes')
+        plt.xlabel('Mes')
+        plt.ylabel('Tiempo(minutos)')
+        plt.savefig('samur/graficas/HistogramaMes.png')
+        plt.close()
     
-    def calcular_barrasMes(self):
-        pass
-
-# Abstract Product para distrito
-class AbstractProductDistrito(ABC):
-    @abstractmethod
-    def calcular_mediaDistrito(self):
-        pass
-
-    @abstractmethod
-    def calcular_modaDistrito(self):
-        pass
-
-    @abstractmethod
-    def calcular_histogramaDistrito(self):
-        pass
-
-    @abstractmethod
-    def calcular_barrasDistrito(self):
-        pass
-
-# Concrete Product para análisis estadísticos de distrito
-class ConcreteProductDistritoAnalisis(AbstractProductMes):
-    def calcular_mediaDistrito(self, data):
-        pass
-    
-    def calcular_modaDistrito(self, data):
-        pass
+    def calcular_lineas(self, data):
+        media = data.groupby('Mes')['Tiempo(minutos)'].mean()
+        media.plot(kind='line')
+        plt.title('Media de Tiempo(minutos) por Mes')
+        plt.xlabel('Mes')
+        plt.ylabel('Tiempo(minutos)')
+        plt.savefig('samur/graficas/LineasMes.png')
+        plt.close()
 
 # Concrete Product para visualización gráfica de distrito
-class ConcreteProductDistritoGrafica(AbstractProductMes):
-    def calcular_histogramaDistrito(self, data):
-        pass
+class ConcreteProductGraficaDistrito(AbstractProductGrafica):
+    def calcular_histograma(self, data):
+        media = data.groupby('Distrito')['Tiempo(minutos)'].mean()
+        media.plot(kind='bar')
+        plt.title('Media de Tiempo(minutos) por Distrito')
+        plt.xlabel('Distrito')
+        plt.ylabel('Tiempo(minutos)')
+        plt.savefig('samur/graficas/HistogramaDistrito.png')
+        plt.close()
     
-    def calcular_barrasDistrito(self, data):
-        pass
+    def calcular_lineas(self, data):
+        media = data.groupby('Distrito')['Tiempo(minutos)'].mean()
+        media.plot(kind='line')
+        plt.title('Media de Tiempo(minutos) por Distrito')
+        plt.xlabel('Distrito')
+        plt.ylabel('Tiempo(minutos)')
+        plt.savefig('samur/graficas/LineasDistrito.png')
+        plt.close()
 
 def client_code(factory: AbstractFactory):
+    # Carga el csv
     data = pd.read_csv('samur/data.csv')
 
-    productMes = factory.create_mes()
-    productDistrito = factory.create_distrito()
+    # Crea los productos para análisis y visualización
+    productAnalisis = factory.create_analisis()
+    productGrafica = factory.create_grafica()
     
-    if isinstance(factory, ConcreteFactoryAnalisis):
-        # Realizar análisis estadísticos y generar visualizaciones
-        media_mes = productMes.calcular_mediaMes(data)
-        moda_mes = productMes.calcular_modaMes(data)
+    # Condicionales para utilizar la fabrica correspondiente en cada caso
+    if isinstance(factory, ConcreteFactoryMes):
+        # Realiza el análisis estadístico de mes
+        media_mes = productAnalisis.calcular_media(data)
+        moda_mes = productAnalisis.calcular_moda(data)
+        print(f"Análisis de Mes - Media:")
+        print(media_mes)
+        print(f"Análisis de Mes - Moda:")
+        print(moda_mes)
 
-        media_distrito = productDistrito.calcular_mediaDistrito(data)
-        moda_distrito = productDistrito.calcular_modaDistrito(data)
-
-        print(f"Análisis de Mes - Media: {media_mes}, Moda: {moda_mes}")
-        print(f"Análisis de Distrito - Media: {media_distrito}, Moda: {moda_distrito}")
+        # Realiza la visualización gráfica de mes
+        print(f"Visualización de Mes - Histograma creado")
+        productGrafica.calcular_histograma(data)
+        print(f"Visualización de Mes - Gráfico de Lineas creado")
+        productGrafica.calcular_lineas(data)
+        
     
-    elif isinstance(factory, ConcreteFactoryGrafica):
-        # Generar visualizaciones
-        print(f"Visualización de Mes - Histograma: )")
-        productMes.calcular_histogramaMes(data)
-        print(f"Visualización de Mes - Gráfico de Barras: )")
-        productMes.calcular_barrasMes(data)
+    elif isinstance(factory, ConcreteFactoryDistrito):
+        # Realiza el análisis estadístico de distrito
+        media_distrito = productAnalisis.calcular_media(data)
+        moda_distrito = productAnalisis.calcular_moda(data)
+        print(f"Análisis de Distrito - Media:")
+        print(media_distrito)
+        print(f"Análisis de Distrito - Moda:")
+        print(moda_distrito)
 
-        print(f"Visualización de Distrito - Histograma: )")
-        productDistrito.calcular_histogramaDistrito(data)
-        print(f"Visualización de Distrito - Gráfico de Barras: )")
-        productDistrito.calcular_barrasDistrito(data)
+        # Realiza la visualización gráfica de distrito 
+        print(f"Visualización de Distrito - Histograma creado")
+        productGrafica.calcular_histograma(data)
+        print(f"Visualización de Distrito - Gráfico de Lineas creado")
+        productGrafica.calcular_lineas(data)
 
 if __name__ == "__main__":
-    analisis_factory = ConcreteFactoryAnalisis()
-    client_code(analisis_factory)
+    # Crea una fabrica de análisis y visualización de mes
+    mes_factory = ConcreteFactoryMes()
+    client_code(mes_factory)
 
-    grafica_factory = ConcreteFactoryGrafica()
-    client_code(grafica_factory)
+    # Crea una fabrica de análisis y visualización de distrito
+    distrito_factory = ConcreteFactoryDistrito()
+    client_code(distrito_factory)

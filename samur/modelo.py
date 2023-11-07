@@ -31,5 +31,8 @@ data = data.drop(columns=['Hora Intervención'])
 # Añade la columna Tiempo(minutos) con el tiempo de espera en minutos
 data['Tiempo(minutos)'] = data['Tiempo Espera'].dt.seconds / 60
 
+# Elimina las filas con 0.0 en la columna Tiempo(minutos)
+data = data[data['Tiempo(minutos)'] != 0.0]
+
 # Guarda el DataFrame en un archivo csv
 data.to_csv('samur/data.csv', index=False)
