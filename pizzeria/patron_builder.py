@@ -306,9 +306,6 @@ class Pizza():
     def add(self, part):
         self.parts.append(part)
 
-    def list_parts(self):
-        print(f"Esta es su pizza elegida: {', '.join(self.parts)}", end="")
-
 # Clase Director que coordina la construcción de la pizza
 class Director:
     def __init__(self):

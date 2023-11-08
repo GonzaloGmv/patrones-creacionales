@@ -99,12 +99,3 @@ def client_code(factory: AbstractFactory):
         productMes.media_mes(data)
         print(f"Visualización de Distrito - Histograma creado")
         productDistrito.media_distrito(data)
-
-if __name__ == "__main__":
-    # Crea la fabrica de análisis estadístico
-    analisis_factory = ConcreteFactoryAnálisis()
-    client_code(analisis_factory)
-
-    # Crea una fabrica de visualización gráfica
-    grafica_factory = ConcreteFactoryGrafica()
-    client_code(grafica_factory)
