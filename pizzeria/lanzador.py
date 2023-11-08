@@ -3,7 +3,9 @@ import guardar_pedido
 import cliente
 
 def main():
-    cliente.Cliente.iniciar()
+    mi_cliente = cliente.Cliente()
+    mi_cliente.iniciar()
+
     # Crea el director y el builder
     director = patron_builder.Director()
     builder = patron_builder.ConcreteBuilder()
@@ -16,6 +18,8 @@ def main():
     pedido = guardar_pedido.Pedido(builder)
     pedido.guardar()
     pedido.mostrar()
+
+    mi_cliente.numero_pedido(pedido)
     
 
 if __name__ == "__main__":
