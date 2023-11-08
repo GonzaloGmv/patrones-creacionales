@@ -121,7 +121,7 @@ class ConcreteBuilder(Builder):
 
 
     def produce_ingredientes(self):
-        ingredientes_principales = ["Jamón", "Pepperoni", "Champiñones", "Aceitunas", "Pimientos", "Cebolla", "Tomate", "Maíz","Pollo", "Salchichas", "Atún", "Pavo", "Anchoas", "Espinacas", "Albóndigas", "Broccoli", "Huevos", "Alcaparras", "Piña", "Rúcula", "Chorizo", "Carne de res", "Carne de cerdo","Aguacate", "Camarones", "Ajo", "Ricotta", "Jalapeños", "Queso Mozzarella", "Queso Cheddar", "Queso Parmesano", "Queso Gouda", "Queso Provolone", "Queso Feta"]
+        ingredientes_principales = ["Jamón", "Pepperoni", "Champiñones", "Aceitunas", "Pimientos", "Cebolla", "Tomate", "Maíz","Pollo", "Salchichas", "Atún", "Pavo", "Anchoas", "Espinacas", "Albóndigas", "Broccoli", "Huevos", "Alcaparras", "Piña", "Rúcula", "Chorizo", "Carne de res", "Carne de cerdo","Aguacate", "Camarones", "Ajo", "Ricotta", "Jalapeños", "Queso Mozzarella", "Queso Cheddar", "Queso Parmesano", "Queso Gouda", "Ingrediente especial: La 33", "Queso Provolone", "Queso Feta"]
 
         while True:
             print("Seleccione hasta 8 ingredientes principales para su pizza (ingrese números separados por comas, máximo 8):")
