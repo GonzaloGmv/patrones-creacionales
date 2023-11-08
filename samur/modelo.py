@@ -34,5 +34,8 @@ data['Tiempo(minutos)'] = data['Tiempo Espera'].dt.seconds / 60
 # Elimina las filas con 0.0 en la columna Tiempo(minutos)
 data = data[data['Tiempo(minutos)'] != 0.0]
 
+# Elimina las filas cuyo Tiempo(minutos) sea mayor que 60, ya que al ser un servicio de emergencia no debería superar esa cifra, por lo que se considera un error
+data = data[data['Tiempo(minutos)'] < 60]
+
 # Guarda el DataFrame en un archivo csv
 data.to_csv('samur/data.csv', index=False)
