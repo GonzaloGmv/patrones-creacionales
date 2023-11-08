@@ -141,7 +141,7 @@ class ConcreteBuilder(Builder):
                         else:
                             print(f"Opción {num} no válida. Se omitirá.")
                     if len(ingredientes_elegidos) <= 8:
-                        self._pizza.add("Ingredientes Principales: " + "/".join(ingredientes_elegidos))
+                        self._pizza.add("Ingredientes " + "/".join(ingredientes_elegidos))
                         print('\n')
                         break
                     else:
@@ -288,7 +288,7 @@ class ConcreteBuilder(Builder):
                         else:
                             print(f"Opción {num} no válida. Se omitirá.")
                     if len(extras_elegidos) <= 3:
-                        self._pizza.add("Extras Gourmet: " + "/".join(extras_elegidos))
+                        self._pizza.add("Extras " + "/".join(extras_elegidos))
                         print('\n')
                         break
                     else:
@@ -331,12 +331,3 @@ class Director:
         self.builder.produce_maridaje()
         self.builder.produce_borde()
         self.builder.produce_extra()
-
-
-if __name__ == "__main__":
-    director = Director()
-    builder = ConcreteBuilder()
-    director.builder = builder
-
-    director.build_full_featured_product()
-    builder.pizza.list_parts()
