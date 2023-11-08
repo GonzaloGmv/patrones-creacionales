@@ -1,7 +1,9 @@
 import patron_builder
 import guardar_pedido
+import cliente
 
 def main():
+    cliente.Cliente.iniciar()
     # Crea el director y el builder
     director = patron_builder.Director()
     builder = patron_builder.ConcreteBuilder()

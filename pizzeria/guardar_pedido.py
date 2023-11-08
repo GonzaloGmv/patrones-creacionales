@@ -5,6 +5,19 @@ class Pedido():
     def __init__(self, builder):
         self.pizza_pedido = builder.pizza
     
+    def numero_pedido(self):
+        try:
+            pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+            if not pedidos_df.empty:
+                ultimo_id = pedidos_df['id'].max()
+                nuevo_id = ultimo_id + 1
+            else:
+                nuevo_id = 1
+        except FileNotFoundError:
+            nuevo_id = 1
+
+        return nuevo_id
+    
     # Crea un diccionario con las partes de la pizza
     def diccionario(self):
         pedido_dict = {'Masa': [part for part in self.pizza_pedido.parts if 'Masa' in part],
@@ -25,9 +38,15 @@ class Pedido():
     # Guarda el pedido en un archivo csv a partir del diccionario
     def guardar(self):
         pedido_dict = self.diccionario()
-        pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+        try:
+            pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+        except FileNotFoundError:
+            pedidos_df = pd.DataFrame(columns=pedido_dict.keys())
+
+        pedido_dict['id'] = self.numero_pedido()
 
         pedidos_df = pd.concat([pedidos_df, pd.DataFrame([pedido_dict])], ignore_index=True)
+        pedidos_df['id'] = pedidos_df['id'].astype(int)
         pedidos_df.to_csv('pizzeria/pedidos.csv', index=False)
     
     # Muestra el pedido en la terminal
