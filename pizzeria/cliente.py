@@ -42,7 +42,7 @@ class Cliente():
         n_pedido = pedido.numero_pedido() -1
         user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
         pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
-        if pedidos_anteriores != 0:
+        if pd.notna(pedidos_anteriores):
             nuevos_pedidos = f"{pedidos_anteriores}/{n_pedido}"
         else:
             nuevos_pedidos = n_pedido
@@ -52,3 +52,11 @@ class Cliente():
 
         # Guarda el DataFrame actualizado en el archivo CSV
         self.clientes_df.to_csv('pizzeria/clientes.csv', index=False)
+    
+    def acceder_pedidos(self):
+        user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
+        pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
+        if pedidos_anteriores != 0:
+            return pedidos_anteriores
+        else:
+            return 0

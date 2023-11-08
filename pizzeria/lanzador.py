@@ -20,6 +20,7 @@ def main():
     pedido.mostrar()
 
     mi_cliente.numero_pedido(pedido)
+    print(mi_cliente.acceder_pedidos())
     
 
 if __name__ == "__main__":
