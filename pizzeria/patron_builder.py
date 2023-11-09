@@ -76,7 +76,6 @@ class ConcreteBuilder(Builder):
             else:
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
 
-
     def produce_salsa(self):
         while True:
             print("Seleccione el número correspondiente al tipo de salsa de pizza:")
@@ -120,39 +119,39 @@ class ConcreteBuilder(Builder):
             else:
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
 
-
     def produce_ingredientes(self, cliente, pedido):
         ingredientes_principales = ["Jamón", "Pepperoni", "Champiñones", "Aceitunas", "Pimientos", "Cebolla", "Tomate", "Maíz","Pollo", "Salchichas", "Atún", "Pavo", "Anchoas", "Espinacas", "Albóndigas", "Broccoli", "Huevos", "Alcaparras", "Piña", "Rúcula", "Chorizo", "Carne de res", "Carne de cerdo","Aguacate", "Camarones", "Ajo", "Ricotta", "Jalapeños", "Queso Mozzarella", "Queso Cheddar", "Queso Parmesano", "Queso Gouda", "Ingrediente especial: La 33", "Queso Provolone", "Queso Feta"]
 
+        # Bucle para seleccionar los ingredientes. En caso de que seleccione más de 8, se le pide que seleccione de nuevo
         while True:
             print("Seleccione hasta 8 ingredientes principales para su pizza (ingrese números separados por comas, máximo 8):")
-            
+            # Imprime los ingredientes
             for i, ingrediente in enumerate(ingredientes_principales, 1):
                 print(f"{i}. {ingrediente}")
 
+            # Llama a la funcion acceder_pedidos para obtener los ingredientes de los pedidos anteriores del cliente
             ingredientes_anteriores = cliente.acceder_pedidos(pedido)
-            # Contar la frecuencia de cada ingrediente
+            # Cuenta la frecuencia de cada ingrediente
             contador_ingredientes = Counter(ingredientes_anteriores)
-
-            # Obtener los 5 ingredientes más comunes
+            # Obtiene los 5 ingredientes más comunes
             ingredientes_repes = contador_ingredientes.most_common(5)
-
-
-            # Imprimir los ingredientes más comunes
+            # Imprime los ingredientes más comunes
             if ingredientes_repes:
-                print("\n Nuestras sugerencias basándonos en tus anteriores pedidos:", ", ".join(f"{ingrediente}" for ingrediente, frecuencia in ingredientes_repes))
+                print("\nNuestras sugerencias basándonos en tus anteriores pedidos:", ", ".join(f"{ingrediente}" for ingrediente, frecuencia in ingredientes_repes))
 
-            opcion = input("\n Ingrese los números de los ingredientes deseados: ")
+            opcion = input("\nIngrese los números de los ingredientes deseados: ")
             ingredientes_elegidos = []
 
             if opcion:
                 try:
                     seleccion = [int(x) for x in opcion.split(',')]
+                    # Lee los números ingresados y los añade a una lista
                     for num in seleccion:
                         if 1 <= num <= len(ingredientes_principales):
                             ingredientes_elegidos.append(ingredientes_principales[num - 1])
                         else:
                             print(f"Opción {num} no válida. Se omitirá.")
+                    # Verifica que no se hayan seleccionado más de 8 ingredientes
                     if len(ingredientes_elegidos) <= 8:
                         self._pizza.add("Ingredientes " + "/".join(ingredientes_elegidos))
                         print('\n')
@@ -162,8 +161,7 @@ class ConcreteBuilder(Builder):
                 except ValueError:
                     print("Entrada no válida. Inténtelo de nuevo.")
             else:
-                print("No se seleccionaron ingredientes principales. Continuar sin ingredientes. \n")
-
+                print("No se seleccionaron ingredientes principales. \n")
     
     def produce_coccion(self):
         while True:
@@ -188,8 +186,6 @@ class ConcreteBuilder(Builder):
                 break
             else:
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
-
-
 
     def produce_presentacion(self) -> None:
         while True:
@@ -249,7 +245,6 @@ class ConcreteBuilder(Builder):
             else:
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
 
-    
     def produce_borde(self):
         while True:
             print("Seleccione el número correspondiente al tipo de borde de la pizza:")
@@ -279,7 +274,6 @@ class ConcreteBuilder(Builder):
             else:
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
 
-    
     def produce_extra(self):
         extras = ["Trufas", "Queso de cabra", "Setas", "Caviar", "Salmón Ahumado"]
 
@@ -295,11 +289,13 @@ class ConcreteBuilder(Builder):
             if opcion:
                 try:
                     seleccion = [int(x) for x in opcion.split(',')]
+                    # Lee los números ingresados y los añade a una lista
                     for num in seleccion:
                         if 1 <= num <= len(extras):
                             extras_elegidos.append(extras[num - 1])
                         else:
                             print(f"Opción {num} no válida. Se omitirá.")
+                    # Verifica que no se hayan seleccionado más de 3 extras
                     if len(extras_elegidos) <= 3:
                         self._pizza.add("Extras " + "/".join(extras_elegidos))
                         print('\n')
