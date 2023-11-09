@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Clase Cliente
+# Clase Pedido
 class Pedido():
     def __init__(self, builder):
         # Inicializa la pizza
