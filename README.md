@@ -582,7 +582,7 @@ class Director:
 ```
 
 Otra parte importante de este ejercicio es la realizada en el módulo guardar_pedido. Este módulo consta de una clase Pedido que se encarga de guardar el pedido en un csv además de mostrarlo en el csv. Esta clase cuenta con 5 funciones. Las funciones son las siguientes:
-- numero_pedido(): Esta función se utiliza para generar un número de pedido. Su funcionamiento se basa en leer el csv que contiene todos los pedidos, ver cual es el último número de pedido, y crear un nuevo número sumandole 1 a este último.
+- numero_pedido(): Esta función se utiliza para generar un número de pedido. Su funcionamiento se basa en leer el csv que contiene todos los pedidos, ver cual es el último número de pedido, y crear un nuevo número sumándole 1 a este último.
 - diccionario(): Esta función, a partir del builder, crea un diccionario para cada parte de la pizza.
 - guardar(): Esta función recibe el diccionario y el número de pedido de las funciones anteriores y lo guarda todo en un csv.
 - ingredientes_anteriores(): Esta función recibe una lista de pedidos y devuelve los ingredientes de estos pedidos.
