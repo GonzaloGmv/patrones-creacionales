@@ -9,12 +9,12 @@ Este ejercicio pedía desarrollar un programa en Python que hiciera uso del patr
 Para esto, lo primero era leer estos datos y modelizarlos. 
 
 Lo que hice para limpiar estos datos es lo siguiente:
-- Eliminar la columna 'Año': Al ser todos los datos de 2023, esta columna estaba repetida y no aportaba nada
-- Sustituir por 0 los valores nulos de la columna 'Hospital': Si esta columna esta vacía significa que el paciente no ha sido hospitalizado.
-- Eliminar las filas con valores nulos
-- Crea una nueva columna 'Tiempo(minutos)' para ver la diferencia entre las columnas "Hora Solicitud" y "Hora Intervención"
-- Corregir las diferencias a través de la medianoche sumando un día cuando es necesario
-- Eliminar las filas con 0.0 en la columna Tiempo(minutos)
+- Eliminar la columna 'Año': Al ser todos los datos de 2023, esta columna estaba repetida y no aportaba nada.
+- Sustituir por 0 los valores nulos de la columna 'Hospital': Si esta columna está vacía significa que el paciente no ha sido hospitalizado.
+- Eliminar las filas con valores nulos.
+- Crea una nueva columna 'Tiempo(minutos)' para ver la diferencia entre las columnas "Hora Solicitud" y "Hora Intervención".
+- Corregir las diferencias a través de la medianoche sumando un día cuando es necesario.
+- Eliminar las filas con 0.0 en la columna Tiempo(minutos).
 - Eliminar las filas cuyo Tiempo(minutos) sea mayor que 60: al ser un servicio de emergencia no debería superar esa cifra, por lo que se considera un error.
 
 El código es el siguiente:
@@ -61,15 +61,15 @@ data = data[data['Tiempo(minutos)'] < 60]
 # Guarda el DataFrame en un archivo csv
 data.to_csv('samur/data.csv', index=False)
 ```
-Lo siguiente es hacer el patrón abstracr factory.
+Lo siguiente es hacer el patrón Abstract Factory.
 
-Para este proyecto he creado dos fábricas que fabricaran los productos de dos maneras distintas. Los productos son Mes y Distrito.
+Para este proyecto he creado dos fábricas que fabrican los productos de dos maneras distintas. Los productos son Mes y Distrito.
 
 Las fábricas tienen dos funciones cada una, una para la media y otra para la mediana.
 
 En la primera fábrica, la función de la media imprime en la terminal el valor medio de Tiempo de espera para cada mes o distrito respectivamente, y lo mismo para la mediana.
 
-La segunda fábrica hace lo mismo pero de otra forma, por lo quee también calculaba la media y la mediana de Tiempo de espera para cada mes o distrito, pero en vez de imprimirlo en la terminal, hace un histograma.
+La segunda fábrica hace lo mismo pero de otra forma, por lo quee también calcula la media y la mediana de Tiempo de espera para cada mes o distrito, pero en vez de imprimirlo en la terminal, hace un histograma.
 
 De esta forma, con el Abstract Factory, teniendo dos productos, podemos fabricar sus variantes en distintas fábricas, es decir, de los productos mes y distrito, hemos fabricado las variantes gráficas y numéricas en distintas fábricas, tanto para la media como para la mediana.
 
@@ -579,4 +579,190 @@ class Director:
         self.builder.produce_maridaje()
         self.builder.produce_borde()
         self.builder.produce_extra()
+```
+
+Otra parte importante de este ejercicio es la realizada en el módulo guardar_pedido. Este módulo consta de una clase Pedido que se encarga de guardar el pedido en un csv además de mostrarlo en el csv. Esta clase cuenta con 5 funciones. Las funciones son las siguientes:
+- numero_pedido(): Esta función se utiliza para generar un número de pedido. Su funcionamiento se basa en leer el csv que contiene todos los pedidos, ver cual es el último número de pedido, y crear un nuevo número sumándole 1 a este último.
+- diccionario(): Esta función, a partir del builder, crea un diccionario para cada parte de la pizza.
+- guardar(): Esta función recibe el diccionario y el número de pedido de las funciones anteriores y lo guarda todo en un csv.
+- ingredientes_anteriores(): Esta función recibe una lista de pedidos y devuelve los ingredientes de estos pedidos.
+- mostrar(): Por último esta función muestra el pedido en la terminal.
+
+El código de esta parte es el siguiente:
+```
+import pandas as pd
+
+# Clase Pedido
+class Pedido():
+    def __init__(self, builder):
+        # Inicializa la pizza
+        self.pizza_pedido = builder.pizza
+    
+    # Funcion que genera el numero de pedido
+    def numero_pedido(self):
+        try:
+            pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+            if not pedidos_df.empty:
+                ultimo_id = pedidos_df['numero'].max()
+                nuevo_id = ultimo_id + 1
+            else:
+                nuevo_id = 1
+        except FileNotFoundError:
+            nuevo_id = 1
+
+        return nuevo_id
+    
+    # Funcion que crea un diccionario con las partes de la pizza
+    def diccionario(self):
+        pedido_dict = {'Masa': [part for part in self.pizza_pedido.parts if 'Masa' in part],
+                    'Salsa': [part for part in self.pizza_pedido.parts if 'Salsa' in part],
+                    'Ingredientes': [part for part in self.pizza_pedido.parts if 'Ingredientes' in part],
+                    'Cocción': [part for part in self.pizza_pedido.parts if 'Poco Hecha' in part or 'En su Punto' in part or 'Muy Hecha' in part],
+                    'Presentación': [part for part in self.pizza_pedido.parts if 'En Plato' in part or 'En Caja' in part or 'Para Llevar' in part],
+                    'Maridaje': [part for part in self.pizza_pedido.parts if 'Vino Tinto' in part or 'Cerveza' in part or 'Agua' in part or 'Refresco' in part or 'Sin bebida' in part],
+                    'Borde': [part for part in self.pizza_pedido.parts if 'Borde de Queso' in part or 'Borde Relleno de Jamón y Queso' in part or 'Borde de Ajo y Mantequilla' in part or 'Borde Clásico' in part],
+                    'Extras Gourmet': [part for part in self.pizza_pedido.parts if 'Extra' in part]}
+        # Cada valor del diccionario es una lista, por lo que se convierte a string
+        for key in pedido_dict:
+            pedido_dict[key] = ' '.join(pedido_dict[key])
+        # Elimina las palabras Ingredientes y Extras Gourmet del valor del diccionario
+        pedido_dict['Ingredientes'] = pedido_dict['Ingredientes'][13:]
+        pedido_dict['Extras Gourmet'] = pedido_dict['Extras Gourmet'][7:]
+        return pedido_dict
+
+    # Funcion que guarda el pedido en un archivo csv a partir del diccionario
+    def guardar(self):
+        # Llama a la funcion diccionario para obtener el diccionario
+        pedido_dict = self.diccionario()
+        try:
+            pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+        except FileNotFoundError:
+            pedidos_df = pd.DataFrame(columns=pedido_dict.keys())
+
+        # Crea una nueva clave-valor en el diccionario con el numero de pedido. Para ello llama a la funcion numero_pedido
+        pedido_dict['numero'] = self.numero_pedido()
+
+        # Concatea el diccionario con el DataFrame de pedidos y lo guarda en el archivo CSV
+        pedidos_df = pd.concat([pedidos_df, pd.DataFrame([pedido_dict])], ignore_index=True)
+        pedidos_df['numero'] = pedidos_df['numero'].astype(int)
+        pedidos_df.to_csv('pizzeria/pedidos.csv', index=False)
+    
+    # Funcion que accede a unos pedidos dada una lista de id y devuelve una lista con los ingredientes
+    def ingredientes_anteriores(self, lista_id):
+        pedidos_df = pd.read_csv('pizzeria/pedidos.csv')
+        if lista_id == 0:
+            return []
+        else:
+            ingredientes = []
+            for num in lista_id:
+                num = int(float(num))
+                # Accede a la fila del DataFrame que corresponde al numero de pedido y obtiene los ingredientes de esa fila
+                ingredientes_num = pedidos_df[pedidos_df['numero'] == num]['Ingredientes'].iloc[0]
+                # Separa los ingredientes por /
+                ingredientes.extend(ingredientes_num.split('/'))
+            return ingredientes
+    
+    # Muestra el pedido en la terminal
+    def mostrar(self):
+        print("Esta es tu pizza: ")
+        pedido_dict = self.diccionario()
+        for key, value in pedido_dict.items():
+            print(f'{key}: {value}')
+```
+
+La última parte de este ejercicio se encuentra en el módulo cliente.py. Este módulo tiene una clase Cliente que se encarga de iniciar sesión o registrarte, guardar los datos en un csv, y de ver los pedidos de ese cliente. Las funciones que tiene esta clase son las siguientes:
+- iniciar(): En primer lugar esta función te pregunta si eres nuevo o no, y en función de eso te permite iniciar sesión con tu usuario y contraseña, o registrarse en caso de que seas nuevo. Además, si es un nuevo usuario, añade los datos a un csv donde están todos los clientes.
+- pedido_cliente(): Esta función obtiene el número de pedido y lo añade a la información del cliente en el csv. Primero llama a la función numero_pedido de la clase Pedido, a continuación, actualiza la columna pedidos del cliente y le añade este pedido.
+- acceder_pedidos(): Esta función accede a la información del cliente en el csv y obtiene todos los ingredientes que ha pedido. En primer lugar, accede a la fila del csv donde está el usuario y obtiene los números de pedido. Después llama a la función ingredientes_anteriores de la clase Pedido y convierte esos números de pedidos en la lista con los ingredientes, que es lo que devolverá.
+
+El código de esta parte es el siguiente:
+```
+import pandas as pd
+import numpy as np
+
+# Clase Cliente
+class Cliente():
+    def __init__(self):
+        # Inicializa las variables vacias que luego se llenaran
+        self.usuario = ''
+        self.contraseña = ''
+        self.telefono = ''
+        self.domicilio = ''
+        self.pedidos = []
+        # Lee el archivo CSV clientes.csv y lo guarda en una variable
+        self.clientes_df = pd.read_csv('pizzeria/clientes.csv')
+
+    # Funcion para iniciar sesion o crear un nuevo usuario
+    def iniciar(self):
+        # Bucle para iniciar sesion o crear un nuevo usuario
+        while True:
+            nuevo = input('¿Eres un cliente nuevo? (S/N): ')
+            if nuevo.lower() == 's':
+                # Si es un nuevo cliente, lo registra
+                self.telefono = input('Teléfono: ')
+                self.domicilio = input('Dirección: ')
+                self.usuario = input('Usuario: ')
+                self.contraseña = input('Contraseña: ')
+                # Crea un DataFrame con los datos del nuevo cliente
+                nuevo_cliente = pd.DataFrame({'Usuario': [self.usuario], 'Contraseña': [self.contraseña], 'Telefono': [self.telefono], 'Domicilio': [self.domicilio]})
+                # Concatena el nuevo DataFrame con el DataFrame de clientes
+                self.clientes_df = pd.concat([self.clientes_df, nuevo_cliente], ignore_index=True)
+                # Guarda el DataFrame actualizado en el archivo CSV
+                self.clientes_df.to_csv('pizzeria/clientes.csv', index=False)
+                break
+            elif nuevo.lower() == 'n':
+                # Si no es un nuevo cliente, inicia sesion
+                self.usuario = input('Usuario: ')
+                self.contraseña = input('Contraseña: ')
+                # Verifica si el usuario existe
+                if self.usuario in self.clientes_df['Usuario'].values.tolist():
+                    # Verifica si la contraseña coincide
+                    index = self.clientes_df.index[self.clientes_df['Usuario'] == self.usuario].tolist()[0]
+                    stored_password = self.clientes_df.at[index, 'Contraseña']
+                    if self.contraseña == stored_password:
+                        print('Inicio de sesión exitoso. ¡Bienvenido de nuevo!')
+                        break
+                    else:
+                        print('La contraseña no coincide. Intenta de nuevo.')
+                else:
+                    print('El usuario no existe. Intenta de nuevo.')
+            else:
+                print('Opción no válida. Intenta de nuevo.')
+    
+    # Funcion que obtiene el numero de pedido y lo guarda en el archivo CSV
+    def pedido_cliente(self, pedido):
+        # Obtiene el numero de pedido del pedido recientemente guardado
+        n_pedido = pedido.numero_pedido() -1
+        user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
+        pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
+        # Verifica si el cliente tiene pedidos anteriores
+        if pd.notna(pedidos_anteriores):
+            nuevos_pedidos = f"{pedidos_anteriores}/{n_pedido}"
+        else:
+            nuevos_pedidos = n_pedido
+
+        # Actualiza la columna 'Pedidos' con los nuevos pedidos
+        self.clientes_df.at[user_index, 'Pedidos'] = nuevos_pedidos
+
+        # Guarda el DataFrame actualizado en el archivo CSV
+        self.clientes_df.to_csv('pizzeria/clientes.csv', index=False)
+    
+    # Funcion que obtiene los pedidos anteriores del cliente y devuelve los ingredientes de estos pedidos
+    def acceder_pedidos(self, pedido):
+        # Obtiene los pedidos anteriores del cliente
+        user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
+        pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
+        # Verifica si el cliente tiene pedidos anteriores
+        if pd.isna(pedidos_anteriores):
+            numero_ped = 0
+        else:
+            # Verificar si hay solo un pedido
+            if isinstance(pedidos_anteriores, (int, np.int64)):
+                numero_ped = [pedidos_anteriores]
+            else:
+                # Si hay mas de un pedido, los separa
+                numero_ped = str(pedidos_anteriores).split('/')
+        # Llama a la funcion ingredientes_anteriores de la clase Pedido que le devuelve los ingredientes
+        ingredientes = pedido.ingredientes_anteriores(numero_ped)
+        return ingredientes
 ```
