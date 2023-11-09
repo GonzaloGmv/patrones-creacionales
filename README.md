@@ -9,12 +9,12 @@ Este ejercicio pedía desarrollar un programa en Python que hiciera uso del patr
 Para esto, lo primero era leer estos datos y modelizarlos. 
 
 Lo que hice para limpiar estos datos es lo siguiente:
-- Eliminar la columna 'Año': Al ser todos los datos de 2023, esta columna estaba repetida y no aportaba nada
-- Sustituir por 0 los valores nulos de la columna 'Hospital': Si esta columna esta vacía significa que el paciente no ha sido hospitalizado.
-- Eliminar las filas con valores nulos
-- Crea una nueva columna 'Tiempo(minutos)' para ver la diferencia entre las columnas "Hora Solicitud" y "Hora Intervención"
-- Corregir las diferencias a través de la medianoche sumando un día cuando es necesario
-- Eliminar las filas con 0.0 en la columna Tiempo(minutos)
+- Eliminar la columna 'Año': Al ser todos los datos de 2023, esta columna estaba repetida y no aportaba nada.
+- Sustituir por 0 los valores nulos de la columna 'Hospital': Si esta columna está vacía significa que el paciente no ha sido hospitalizado.
+- Eliminar las filas con valores nulos.
+- Crea una nueva columna 'Tiempo(minutos)' para ver la diferencia entre las columnas "Hora Solicitud" y "Hora Intervención".
+- Corregir las diferencias a través de la medianoche sumando un día cuando es necesario.
+- Eliminar las filas con 0.0 en la columna Tiempo(minutos).
 - Eliminar las filas cuyo Tiempo(minutos) sea mayor que 60: al ser un servicio de emergencia no debería superar esa cifra, por lo que se considera un error.
 
 El código es el siguiente:
@@ -61,15 +61,15 @@ data = data[data['Tiempo(minutos)'] < 60]
 # Guarda el DataFrame en un archivo csv
 data.to_csv('samur/data.csv', index=False)
 ```
-Lo siguiente es hacer el patrón abstracr factory.
+Lo siguiente es hacer el patrón Abstract Factory.
 
-Para este proyecto he creado dos fábricas que fabricaran los productos de dos maneras distintas. Los productos son Mes y Distrito.
+Para este proyecto he creado dos fábricas que fabrican los productos de dos maneras distintas. Los productos son Mes y Distrito.
 
 Las fábricas tienen dos funciones cada una, una para la media y otra para la mediana.
 
 En la primera fábrica, la función de la media imprime en la terminal el valor medio de Tiempo de espera para cada mes o distrito respectivamente, y lo mismo para la mediana.
 
-La segunda fábrica hace lo mismo pero de otra forma, por lo quee también calculaba la media y la mediana de Tiempo de espera para cada mes o distrito, pero en vez de imprimirlo en la terminal, hace un histograma.
+La segunda fábrica hace lo mismo pero de otra forma, por lo quee también calcula la media y la mediana de Tiempo de espera para cada mes o distrito, pero en vez de imprimirlo en la terminal, hace un histograma.
 
 De esta forma, con el Abstract Factory, teniendo dos productos, podemos fabricar sus variantes en distintas fábricas, es decir, de los productos mes y distrito, hemos fabricado las variantes gráficas y numéricas en distintas fábricas, tanto para la media como para la mediana.
 
