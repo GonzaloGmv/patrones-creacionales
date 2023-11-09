@@ -766,4 +766,3 @@ class Cliente():
         ingredientes = pedido.ingredientes_anteriores(numero_ped)
         return ingredientes
 ```
-
