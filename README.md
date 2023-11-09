@@ -669,3 +669,8 @@ class Pedido():
         for key, value in pedido_dict.items():
             print(f'{key}: {value}')
 ```
+
+La última parte de este ejercicio se encuentra en el módulo cliente.py. Este módulo tiene una clase Cliente que se encarga de iniciar sesión o registrarte, guardar los datos en un csv, y de ver los pedidos de ese cliente. Las funciones que tiene esta clase son las siguientes:
+- iniciar(): En primer lugar esta función te pregunta si eres nuevo o no, y en función de eso te permite iniciar sesión con tu usuario y contraseña, o registrarse en caso de que seas nuevo. Además, si es un nuevo usuario, añade los datos a un csv donde están todos los clientes.
+- pedido_cliente(): Esta función obtiene el número de pedido y lo añade a la información del cliente en el csv. Primero llama a la función numero_pedido de la clase Pedido, a continuación, actualiza la columna pedidos del cliente y le añade este pedido.
+- acceder_pedidos(): Esta función accede a la información del cliente en el csv y obtiene todos los ingredientes que ha pedido
