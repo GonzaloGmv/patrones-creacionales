@@ -1,3 +1,7 @@
-Masa,Salsa,Ingredientes,Cocción,Presentación,Maridaje,Borde,Extras Gourmet,id
-Masa Fina,Salsa de Tomate,Jamón,Poco Hecha,En Plato,Vino Tinto,Borde de Queso,Trufas,1
-Masa Fina,Salsa de Tomate,Jamón,Poco Hecha,En Plato,Vino Tinto,Borde de Queso,Trufas,2
+Masa,Salsa,Ingredientes,Cocción,Presentación,Maridaje,Borde,Extras Gourmet,numero
+Masa Fina,Salsa de Tomate,Jamón/Ingrediente especial: La 33/Aceitunas,Poco Hecha,En Caja,Vino Tinto,Borde Relleno de Jamón y Queso,Trufas,1
+Masa Fina,Salsa de Pesto,Ingrediente especial: La 33/Pimientos,Poco Hecha,En Caja,Agua,Borde de Queso,Queso de cabra,2
+Masa Fina,Salsa de Pesto,Ingrediente especial: La 33/Pimientos,En su Punto,En Plato,Cerveza,Borde de Queso,Queso de cabra,3
+Masa Fina,Salsa de Pesto,Jamón,En su Punto,En Plato,Vino Tinto,Borde Relleno de Jamón y Queso,Trufas,4
+Masa Fina,Salsa de Pesto,Jamón/Pepperoni/Champiñones/Aceitunas,En su Punto,En Caja,Cerveza,Borde Relleno de Jamón y Queso,Queso de cabra,5
+Masa Fina,Salsa de Pesto,Pepperoni,Muy Hecha,En Plato,Cerveza,Borde de Ajo y Mantequilla,Trufas,6

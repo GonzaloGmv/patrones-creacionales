@@ -1,5 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
+from collections import Counter
 
 # Abstract Builder
 class Builder(ABC):
@@ -58,7 +59,7 @@ class ConcreteBuilder(Builder):
     # Implementación de métodos para construir partes de la pizza
     def produce_masa(self):
         while True:
-            print("Seleccione el número correspondiente al tipo de masa de pizza:")
+            print("\n Seleccione el número correspondiente al tipo de masa de pizza:")
             print("1. Masa Fina")
             print("2. Masa Gruesa")
 
@@ -120,7 +121,7 @@ class ConcreteBuilder(Builder):
                 print("Opción no válida. Por favor, seleccione un número válido. \n")
 
 
-    def produce_ingredientes(self):
+    def produce_ingredientes(self, cliente, pedido):
         ingredientes_principales = ["Jamón", "Pepperoni", "Champiñones", "Aceitunas", "Pimientos", "Cebolla", "Tomate", "Maíz","Pollo", "Salchichas", "Atún", "Pavo", "Anchoas", "Espinacas", "Albóndigas", "Broccoli", "Huevos", "Alcaparras", "Piña", "Rúcula", "Chorizo", "Carne de res", "Carne de cerdo","Aguacate", "Camarones", "Ajo", "Ricotta", "Jalapeños", "Queso Mozzarella", "Queso Cheddar", "Queso Parmesano", "Queso Gouda", "Ingrediente especial: La 33", "Queso Provolone", "Queso Feta"]
 
         while True:
@@ -129,7 +130,19 @@ class ConcreteBuilder(Builder):
             for i, ingrediente in enumerate(ingredientes_principales, 1):
                 print(f"{i}. {ingrediente}")
 
-            opcion = input("Ingrese los números de los ingredientes deseados o presione Enter para omitir: ")
+            ingredientes_anteriores = cliente.acceder_pedidos(pedido)
+            # Contar la frecuencia de cada ingrediente
+            contador_ingredientes = Counter(ingredientes_anteriores)
+
+            # Obtener los 5 ingredientes más comunes
+            ingredientes_repes = contador_ingredientes.most_common(5)
+
+
+            # Imprimir los ingredientes más comunes
+            if ingredientes_repes:
+                print("\n Nuestras sugerencias basándonos en tus anteriores pedidos:", ", ".join(f"{ingrediente}" for ingrediente, frecuencia in ingredientes_repes))
+
+            opcion = input("\n Ingrese los números de los ingredientes deseados o presione Enter para omitir: ")
             ingredientes_elegidos = []
 
             if opcion:
@@ -152,7 +165,7 @@ class ConcreteBuilder(Builder):
                 print("No se seleccionaron ingredientes principales. Continuar sin ingredientes. \n")
 
     
-    def produce_coccion(self) -> None:
+    def produce_coccion(self):
         while True:
             print("Seleccione el número correspondiente al grado de cocción de la pizza:")
             print("1. Poco hecha")
@@ -319,10 +332,10 @@ class Director:
     def builder(self, builder):
         self._builder = builder
 
-    def build_full_featured_product(self):
+    def build_full_featured_product(self, cliente, pedido):
         self.builder.produce_masa()
         self.builder.produce_salsa()
-        self.builder.produce_ingredientes()
+        self.builder.produce_ingredientes(cliente, pedido)
         self.builder.produce_coccion()
         self.builder.produce_presentacion()
         self.builder.produce_maridaje()

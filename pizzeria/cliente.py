@@ -1,5 +1,6 @@
 import pandas as pd
 import guardar_pedido
+import numpy as np
 
 class Cliente():
     def __init__(self):
@@ -38,7 +39,7 @@ class Cliente():
             else:
                 print('Opción no válida. Intenta de nuevo.')
     
-    def numero_pedido(self, pedido):
+    def pedido_cliente(self, pedido):
         n_pedido = pedido.numero_pedido() -1
         user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
         pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
@@ -53,10 +54,16 @@ class Cliente():
         # Guarda el DataFrame actualizado en el archivo CSV
         self.clientes_df.to_csv('pizzeria/clientes.csv', index=False)
     
-    def acceder_pedidos(self):
+    def acceder_pedidos(self, pedido):
         user_index = self.clientes_df[self.clientes_df['Usuario'] == self.usuario].index[0]
         pedidos_anteriores = self.clientes_df.at[user_index, 'Pedidos']
-        if pedidos_anteriores != 0:
-            return pedidos_anteriores
+        if pd.isna(pedidos_anteriores):
+            numero_ped = 0
         else:
-            return 0
+            # Verificar si hay solo un pedido
+            if isinstance(pedidos_anteriores, (int, np.int64)):
+                numero_ped = [pedidos_anteriores]
+            else:
+                numero_ped = str(pedidos_anteriores).split('/')
+        ingredientes = pedido.ingredientes_anteriores(numero_ped)
+        return ingredientes
