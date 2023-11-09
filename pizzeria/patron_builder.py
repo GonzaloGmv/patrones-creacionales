@@ -142,7 +142,7 @@ class ConcreteBuilder(Builder):
             if ingredientes_repes:
                 print("\n Nuestras sugerencias basándonos en tus anteriores pedidos:", ", ".join(f"{ingrediente}" for ingrediente, frecuencia in ingredientes_repes))
 
-            opcion = input("\n Ingrese los números de los ingredientes deseados o presione Enter para omitir: ")
+            opcion = input("\n Ingrese los números de los ingredientes deseados: ")
             ingredientes_elegidos = []
 
             if opcion:
@@ -289,7 +289,7 @@ class ConcreteBuilder(Builder):
             for i, extra in enumerate(extras, 1):
                 print(f"{i}. {extra}")
 
-            opcion = input("Ingrese los números de los extras deseados (ejemplo: 1, 3, 5) o presione Enter para omitir: ")
+            opcion = input("Ingrese los números de los extras deseados: ")
             extras_elegidos = []
 
             if opcion:

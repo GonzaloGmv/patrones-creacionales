@@ -1,8 +1,8 @@
-import patron_builder
-import guardar_pedido
-import cliente
+import pizzeria.patron_builder as patron_builder
+import pizzeria.guardar_pedido as guardar_pedido
+import pizzeria.cliente as cliente
 
-def main():
+def main_pizzeria():
     mi_cliente = cliente.Cliente()
     mi_cliente.iniciar()
 
@@ -21,7 +21,3 @@ def main():
     pedido.mostrar()
 
     mi_cliente.pedido_cliente(pedido)
-    
-
-if __name__ == "__main__":
-    main()

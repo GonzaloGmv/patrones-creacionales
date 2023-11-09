@@ -1,5 +1,4 @@
 import pandas as pd
-import guardar_pedido
 import numpy as np
 
 class Cliente():

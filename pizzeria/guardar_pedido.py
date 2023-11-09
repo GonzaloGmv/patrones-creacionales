@@ -1,4 +1,3 @@
-import patron_builder
 import pandas as pd
 
 class Pedido():
